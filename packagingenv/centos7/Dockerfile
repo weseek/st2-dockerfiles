@@ -9,7 +9,8 @@ FROM quay.io/dennybaa/droneunit:centos7
 RUN yum -y install python-devel rpmdevtools
 
 # Install fresh pip and co
-RUN curl https://bootstrap.pypa.io/get-pip.py | python; pip install --upgrade virtualenv pip==7.1.2 \
+RUN curl https://bootstrap.pypa.io/get-pip.py | python - pip==7.1.2 wheel==0.26.0 setuptools==18.7.1; \
+      pip install --upgrade virtualenv pip==7.1.2 \
       requests[security] venvctrl && rm -rf /root/.cache
 
 VOLUME ['/home/busybee/build']

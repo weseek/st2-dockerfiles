@@ -6,13 +6,13 @@ FROM quay.io/dennybaa/droneunit:jessie
 #
 
 
+
 # install python development
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get -y install build-essential python-dev python
-              
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        devscripts debhelper dh-make && apt-get clean
+        devscripts debhelper dh-make dh-systemd && apt-get clean
 
 # We use our version, since it fixes shebangd lines rewrites
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -24,7 +24,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
           rm -rf /tmp/dh-virtualenv*
 
 # Install fresh pip and co
-RUN curl https://bootstrap.pypa.io/get-pip.py | python; pip install --upgrade wheel virtualenv \
+RUN curl https://bootstrap.pypa.io/get-pip.py | python - pip==7.1.2 wheel==0.26.0 setuptools==18.7.1; \
+      pip install --upgrade wheel virtualenv \
       requests[security] && rm -rf /root/.cache
 
 VOLUME ['/home/busybee/build']

@@ -1,0 +1,12 @@
+{% if version in ('trusty') -%}
+FROM quay.io/dennybaa/droneunit:{{ suite }}-upstart
+{%- elif version in ('centos7') -%}
+FROM quay.io/dennybaa/droneunit:{{ suite }}-systemd
+{%- else -%}
+FROM quay.io/dennybaa/droneunit:{{ suite }}-sshd
+{%- endif -%}
+{% if version in ('wheezy') %}
+
+RUN echo "deb http://httpredir.debian.org/debian wheezy-backports main" >> /etc/apt/sources.list && \
+    apt-get update
+{%- endif -%}

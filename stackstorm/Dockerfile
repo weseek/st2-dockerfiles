@@ -1,14 +1,13 @@
-FROM debian:wheezy
+FROM ubuntu:trusty
 
 ARG ST2_VERSION
 ARG ST2_REPO=stable
-ARG ST2_PACKAGE=https://packagecloud.io/StackStorm/${ST2_REPO}/packages/debian/wheezy/st2_${ST2_VERSION}_amd64.deb/download
+ARG ST2_PACKAGE=https://packagecloud.io/StackStorm/${ST2_REPO}/packages/ubuntu/trusty/st2_${ST2_VERSION}_amd64.deb/download
 
 LABEL com.stackstorm.version="${ST2_VERSION}"
 
-ADD ./sources.list /etc/apt/ 
-
-RUN apt-get -y update && apt-get -y install adduser procps python2.7 libffi5 libyaml-0-2 git libpcre3 libpython2.7 libxml2 python-dev libssl-dev libffi-dev sudo
+RUN sed -ie 's/http:\/\/archive.ubuntu.com\/ubuntu/http:\/\/ftp.iij.ad.jp\/pub\/linux\/ubuntu\/archive/g' /etc/apt/sources.list
+RUN apt-get -y update && apt-get -y install adduser procps python2.7 libffi6 libyaml-0-2 git libpcre3 libpython2.7 libxml2 python-dev libssl-dev libffi-dev sudo
 
 ADD ${ST2_PACKAGE} /tmp/st2_${ST2_VERSION}_amd64.deb
 RUN dpkg -i /tmp/st2_${ST2_VERSION}_amd64.deb && rm -r /tmp/st2_${ST2_VERSION}_amd64.deb && apt-get clean
